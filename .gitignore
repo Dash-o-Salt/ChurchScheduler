@@ -9,3 +9,5 @@ bin/Debug/ChurchScheduler.vshost.exe.manifest
 ~$GenericSchedule.xlsm
 ~$Readme.docx
 ChurchScheduler.suo
+ChurchScheduler.suo
+ChurchScheduler.csproj.user

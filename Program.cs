@@ -92,8 +92,6 @@ namespace ChurchScheduler
 
 			if (printAllActiveEmails)
 			{
-				Console.WriteLine("Emails for all active members: ");
-
 				Console.WriteLine(people.EmailListActiveMembers);
 			}
 			else if (qcMode)

@@ -305,18 +305,22 @@ namespace ChurchScheduler
 		{
 			get
 			{
-				List<string> emails = new List<string>();
+                HashSet<string> emails = new HashSet<string>();
 				StringBuilder emailList = new StringBuilder();
     
 				foreach (Person person in m_people)
 				{
-					if (person.Status.Equals("A") && !person.Email.Equals(""))
+					if (person.Status.Equals("A"))
 					{
-						//Add to list of emails, eliminating duplicates
-						if (!emails.Contains(person.Email))
-						{
-							emails.Add(person.Email);
-						}
+                        if (!String.IsNullOrEmpty(person.Email))
+                        {
+                            emails.Add(person.Email);
+                        }
+
+                        if (!String.IsNullOrEmpty(person.AltEmail))
+                        {
+                            emails.Add(person.AltEmail);
+                        }
 					}
 				}
     
@@ -327,7 +331,7 @@ namespace ChurchScheduler
 				}
     
 				//Subtract off the last comma
-				emailList.Remove(emailList.Length - 2, emailList.Length - emailList.Length - 2);
+				emailList.Remove(emailList.Length - 2, emailList.Length - (emailList.Length - 2));
     
 				return emailList.ToString();
 			}

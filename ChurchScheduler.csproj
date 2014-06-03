@@ -56,6 +56,9 @@
     <Compile Include="WorshipServiceManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GenericSchedule.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="GenericSchedule.xlsm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
