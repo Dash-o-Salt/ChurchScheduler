@@ -1,0 +1,11 @@
+*.exe
+bin/Debug/ChurchScheduler.pdb
+*.pdb
+*.cache
+obj/x86/Debug/ChurchScheduler.csproj.FileListAbsolute.txt
+bin/Debug/Output.txt
+bin/Debug/GenericSchedule.xlsm
+bin/Debug/ChurchScheduler.vshost.exe.manifest
+~$GenericSchedule.xlsm
+~$Readme.docx
+ChurchScheduler.suo

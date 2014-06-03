@@ -105,12 +105,12 @@ namespace ChurchScheduler
 			if (m_numPeopleScheduled > 1)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too many Acolytes - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too many Acolytes - " + m_numPeopleScheduled + "\r\n";
 			}
 			else if (m_numPeopleScheduled < 1)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too few Acolytes - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too few Acolytes - " + m_numPeopleScheduled + "\r\n";
 			}
 
 			m_numPeopleScheduled = 0;
@@ -123,12 +123,12 @@ namespace ChurchScheduler
 			if (m_numPeopleScheduled > 1)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too many Assisting Ministers - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too many Assisting Ministers - " + m_numPeopleScheduled + "\r\n";
 			}
 			else if (m_numPeopleScheduled < 1)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too few Assisting Ministers - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too few Assisting Ministers - " + m_numPeopleScheduled + "\r\n";
 			}
 
 			m_numPeopleScheduled = 0;
@@ -141,12 +141,12 @@ namespace ChurchScheduler
 			if (m_numPeopleScheduled > 2)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too many Greeters - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too many Greeters - " + m_numPeopleScheduled + "\r\n";
 			}
 			else if (m_numPeopleScheduled < 2)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too few Greeters - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too few Greeters - " + m_numPeopleScheduled + "\r\n";
 			}
 
 			m_numPeopleScheduled = 0;
@@ -159,12 +159,12 @@ namespace ChurchScheduler
 			if (m_numPeopleScheduled > 2)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too many Ushers - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too many Ushers - " + m_numPeopleScheduled + "\r\n";
 			}
 			else if (m_numPeopleScheduled < 2)
 			{
 				serviceIsValid = false;
-				m_errorMessage += "There are too few Ushers - " + m_numPeopleScheduled + "\n\n";
+				m_errorMessage += "There are too few Ushers - " + m_numPeopleScheduled + "\r\n";
 			}
 
 			m_numPeopleScheduled = 0;
@@ -177,7 +177,7 @@ namespace ChurchScheduler
 				{
 					serviceIsValid = false;
 
-					m_errorMessage += "This name has been scheduled twice: " + name + "\n\n";
+					m_errorMessage += "This name has been scheduled twice: " + name + "\r\n";
 				}
 				else
 				{
@@ -215,7 +215,7 @@ namespace ChurchScheduler
 				output.Append(GenerateHelperRoleString(person));
 			}
 
-			output.Append("\n");
+			output.Append("\r\n");
 
 			return output.ToString();
 		}
@@ -226,35 +226,47 @@ namespace ChurchScheduler
 
 			roleString.Append(person.FirstName + " " + person.LastName);
 			roleString.Append(" - " + RoleTypeHelper.getRoleTypeString(person.RoleType));
-			roleString.Append("\n");
+			roleString.Append("\r\n");
 
 			return roleString.ToString();
 		}
 
 		private void SplitNames(Person person, List<string> scheduledNames)
 		{
-			//Now we have a list with "first name", "second first name", etc.
-			string[] splitFirstNames = Regex.Split(person.FirstName, " and ");
+            //If the last name contains 'and family' we need to add that as a separate scheduled person
+            if (person.LastName.Contains("and") && person.LastName.IndexOf("family", StringComparison.CurrentCultureIgnoreCase) > 0)
+            {
+                string[] splitLastName = Regex.Split(person.LastName, " and ");
 
-			for (int j = 0; j < splitFirstNames.Length; j++)
-			{
-				//Clean input so we don't have leading or trailing spaces
-				splitFirstNames[j] = splitFirstNames[j].Trim();
+                scheduledNames.Add(person.FirstName + " " + splitLastName[0]);
+                scheduledNames.Add(" and Family");
+                m_numPeopleScheduled += 2;
+            }
+            else
+            {
+                //Now we have a list with "first name", "second first name", etc.
+                string[] splitFirstNames = Regex.Split(person.FirstName, " and ");
 
-				//This means the name we have has a full name, rather than just
-				//a first name (E.g. "John Smith" with a space).
-				if (splitFirstNames[0].IndexOf(" ", StringComparison.Ordinal) > 0)
-				{
-					scheduledNames.Add(splitFirstNames[j]);
-				}
-				else
-				{
-					//Otherwise, we add on the last name
-					scheduledNames.Add(splitFirstNames[j] + " " + person.LastName);
-				}
+                for (int j = 0; j < splitFirstNames.Length; j++)
+                {
+                    //Clean input so we don't have leading or trailing spaces
+                    splitFirstNames[j] = splitFirstNames[j].Trim();
 
-				m_numPeopleScheduled++;
-			}
+                    //This means the name we have has a full name, rather than just
+                    //a first name (E.g. "John Smith" with a space).
+                    if (splitFirstNames[0].IndexOf(" ", StringComparison.Ordinal) > 0)
+                    {
+                        scheduledNames.Add(splitFirstNames[j]);
+                    }
+                    else
+                    {
+                        //Otherwise, we add on the last name
+                        scheduledNames.Add(splitFirstNames[j] + " " + person.LastName);
+                    }
+
+                    m_numPeopleScheduled++;
+                }
+            }
 		}
 
 		//TODO: Case statement?
@@ -262,19 +274,19 @@ namespace ChurchScheduler
 		{
 			if (time == WorshipTime.Eight)
 			{
-				return "8:00 AM\n\n";
+				return "8:00 AM\r\n\r\n";
 			}
 			else if (time == WorshipTime.NineThirty)
 			{
-				return "9:30 AM\n\n";
+                return "9:30 AM\r\n\r\n";
 			}
 			else if (time == WorshipTime.Eleven)
 			{
-				return "11:00 AM\n\n";
+                return "11:00 AM\r\n\r\n";
 			}
 			else
 			{
-				return "Unknown time\n\n";
+                return "Unknown time\r\n\r\n";
 			}
 		}
 	}

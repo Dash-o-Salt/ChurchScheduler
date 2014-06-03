@@ -49,36 +49,30 @@ namespace ChurchScheduler
 			StringBuilder output = new StringBuilder();
 
 			output.Append(m_eight.ToString());
+
+            if (!m_eight.ValidateService())
+            {
+                output.Append("Error:\r\n\r\n");
+                output.Append(m_eight.GetErrorMessage());
+                output.Append("\r\n");
+            }
+
 			output.Append(m_nineThirty.ToString());
+
+            if (!m_nineThirty.ValidateService())
+            {
+                output.Append("Error:\r\n\r\n");
+                output.Append(m_nineThirty.GetErrorMessage());
+                output.Append("\r\n");
+            }
+
 			output.Append(m_eleven.ToString());
-
-			if (!m_eight.ValidateService() || !m_nineThirty.ValidateService() || !m_eleven.ValidateService())
-			{
-				output.Append("Errors by service below.\n\n");
-			}
-
-			if (!m_eight.ValidateService())
-			{
-				output.Append("8:00 AM\n\n");
-				output.Append(m_eight.GetErrorMessage());
-			}
-
-			if (!m_nineThirty.ValidateService())
-			{
-				output.Append("9:30 AM\n\n");
-				output.Append(m_nineThirty.GetErrorMessage());
-			}
 
 			if (!m_eleven.ValidateService())
 			{
-				output.Append("11:00 AM\n\n");
+                output.Append("Error:\r\n\r\n");
 				output.Append(m_eleven.GetErrorMessage());
-			}
-
-			if (!ValidateServices())
-			{
-				output.Append("Errors for all services this Sunday below:\n\n");
-				output.Append(m_errors);
+                output.Append("\r\n");
 			}
 
 			return output.ToString();
@@ -100,7 +94,7 @@ namespace ChurchScheduler
 			{
 				if (checkForDuplicates.Contains(name))
 				{
-					m_errors += "This name has been scheduled twice: " + name + "\n\n";
+					m_errors += "This name has been scheduled twice: " + name + "\r\n";
 
 					isSundayValid = false;
 				}
